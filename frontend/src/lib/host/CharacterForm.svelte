@@ -1,6 +1,7 @@
 <script lang="ts">
 
     import { characterStore } from './characterStore'
+    import {v4 as uuidv4} from 'uuid'
 
     let name: string = ''
     let initiative: number | null = null
@@ -8,7 +9,7 @@
     $: disabled = name === '' || !initiative || initiative < 0
 
     const addCharacter = () => {
-        $characterStore = [{name, initiative: initiative!}]
+        $characterStore = [{id: uuidv4(), name, initiative: initiative!}]
         name = ''
         initiative = null
     }

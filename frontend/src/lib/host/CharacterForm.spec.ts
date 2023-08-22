@@ -11,7 +11,7 @@ describe('CharacterForm', () => {
         characterStore.set([])
     })
 
-    test('render empty form', () => {
+    test('render', () => {
         render(CharacterForm)
 
         const name = screen.getByLabelText('Name')
