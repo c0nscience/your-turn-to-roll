@@ -13,7 +13,10 @@
      */
     "allowJs": true,
     "checkJs": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "types": [
+      "vitest/globals"
+    ]
   },
   "include": [
     "src/**/*.d.ts",
@@ -21,5 +24,9 @@
     "src/**/*.js",
     "src/**/*.svelte"
   ],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    }
+  ]
 }
