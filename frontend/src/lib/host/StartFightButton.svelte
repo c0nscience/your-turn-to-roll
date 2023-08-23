@@ -2,6 +2,8 @@
 
     import { characterStore } from './characterStore'
     import { apiUrl } from '../api/config'
+    import { sessionIdStore } from './sessionStore'
+    import { modeStore } from './modeStore'
 
     const handleClick = async () => {
         const payload = [...$characterStore]
@@ -14,9 +16,14 @@
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({payload}),
+            body: JSON.stringify({
+                sessionId: $sessionIdStore,
+                payload,
+            }),
         })
+
+        $modeStore = 'fight'
     }
 </script>
 
-<button on:click={handleClick} class="btn btn-accent w-full">Start</button>
+<button disabled={$characterStore.length === 0} on:click={handleClick} class="btn btn-accent w-full">Start</button>

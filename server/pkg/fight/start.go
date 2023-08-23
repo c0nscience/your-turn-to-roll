@@ -2,12 +2,14 @@ package fight
 
 import (
 	"encoding/json"
+	"github.com/c0nscience/your-turn-to-roll/pkg/session"
 	"log"
 	"net/http"
 )
 
 type startReq struct {
-	Payload []string `json:"payload"`
+	SessionId int      `json:"sessionId"`
+	Payload   []string `json:"payload"`
 }
 
 func Start(w http.ResponseWriter, r *http.Request) {
@@ -19,4 +21,7 @@ func Start(w http.ResponseWriter, r *http.Request) {
 	}
 
 	log.Printf("received: %v", req)
+
+	session.SetMessage(req.SessionId, req.Payload)
+	w.WriteHeader(http.StatusOK)
 }

@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"github.com/c0nscience/your-turn-to-roll/pkg/fight"
+	"github.com/c0nscience/your-turn-to-roll/pkg/session"
 	"github.com/gorilla/mux"
 	"github.com/rs/cors"
 	"log"
@@ -18,6 +19,7 @@ func main() {
 	r := mux.NewRouter()
 	// Add your routes as needed
 
+	r.HandleFunc("/api/session/start", session.Start).Methods(http.MethodGet, http.MethodOptions)
 	r.HandleFunc("/api/fight/start", fight.Start).Methods(http.MethodPost, http.MethodOptions)
 
 	corsOpts := cors.New(cors.Options{
