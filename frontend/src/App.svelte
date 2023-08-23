@@ -1,29 +1,19 @@
 <script lang="ts">
-  import svelteLogo from './assets/svelte.svg'
-  import viteLogo from '/vite.svg'
-  import Counter from './lib/Counter.svelte'
+
+    import SetupView from './lib/host/SetupView.svelte'
+
+    let mode: 'host' | null = null
 </script>
 
-<main>
-  <div>
-    <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
-      <img src={viteLogo} class="logo" alt="Vite Logo" />
-    </a>
-    <a href="https://svelte.dev" target="_blank" rel="noreferrer">
-      <img src={svelteLogo} class="logo svelte" alt="Svelte Logo" />
-    </a>
-  </div>
-  <h1>Vite + Svelte</h1>
+<main class="container h-full mx-auto">
+    {#if !mode}
+        <div class="h-full w-full grid grid-cols-1 content-center gap-4 px-5">
+            <button class="btn">Client</button>
 
-  <div class="card">
-    <Counter />
-  </div>
-
-  <p>
-    Check out <a href="https://github.com/sveltejs/kit#readme" target="_blank" rel="noreferrer">SvelteKit</a>, the official Svelte app framework powered by Vite!
-  </p>
-
-  <p class="read-the-docs">
-    Click on the Vite and Svelte logos to learn more
-  </p>
+            <button class="btn" on:click={() => mode = 'host'}>Host</button>
+        </div>
+    {/if}
+    {#if mode === 'host'}
+        <SetupView/>
+    {/if}
 </main>

@@ -2,7 +2,9 @@ package main
 
 import (
 	"context"
+	"github.com/c0nscience/your-turn-to-roll/pkg/fight"
 	"github.com/gorilla/mux"
+	"github.com/rs/cors"
 	"log"
 	"net/http"
 	"os"
@@ -16,13 +18,29 @@ func main() {
 	r := mux.NewRouter()
 	// Add your routes as needed
 
+	r.HandleFunc("/api/fight/start", fight.Start).Methods(http.MethodPost, http.MethodOptions)
+
+	corsOpts := cors.New(cors.Options{
+		AllowedOrigins: []string{
+			"http://localhost:5173",
+		},
+		AllowedMethods: []string{
+			http.MethodGet,
+			http.MethodPost,
+			http.MethodPut,
+			http.MethodDelete,
+			http.MethodHead,
+		},
+		AllowedHeaders: []string{"*"},
+	})
+
 	srv := &http.Server{
 		Addr: "0.0.0.0:8081",
 		// Good practice to set timeouts to avoid Slowloris attacks.
 		WriteTimeout: time.Second * 15,
 		ReadTimeout:  time.Second * 15,
 		IdleTimeout:  time.Second * 60,
-		Handler:      r, // Pass our instance of gorilla/mux in.
+		Handler:      corsOpts.Handler(r), // Pass our instance of gorilla/mux in.
 	}
 
 	// Run our server in a goroutine so that it doesn't block.

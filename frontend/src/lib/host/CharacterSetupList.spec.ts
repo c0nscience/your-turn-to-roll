@@ -1,10 +1,16 @@
-import { act, render, screen } from '@testing-library/svelte'
+import { act, render, screen, within } from '@testing-library/svelte'
 import CharacterSetupList from './CharacterSetupList.svelte'
 import { characterStore } from './characterStore'
 import userEvent from '@testing-library/user-event'
+import { vi } from 'vitest'
 
 describe('CharacterSetupList', () => {
     const user = userEvent.setup()
+    beforeAll(() => {
+        HTMLDialogElement.prototype.show = vi.fn();
+        HTMLDialogElement.prototype.showModal = vi.fn();
+        HTMLDialogElement.prototype.close = vi.fn();
+    });
 
     test('render', async () => {
         render(CharacterSetupList)
@@ -43,6 +49,12 @@ describe('CharacterSetupList', () => {
             const deleteButtons = screen.getAllByRole('button')
 
             await act(() => user.click(deleteButtons[1]))
+
+            const confirmModal = screen.getByTestId('confirm-delete')
+            expect(confirmModal).toBeTruthy()
+
+            const confirmBtn = within(confirmModal).getByTestId('confirm-btn')
+            await act(() => user.click(confirmBtn))
 
             const items = screen.getAllByRole('listitem')
             const names = items.map(i => i.textContent)
