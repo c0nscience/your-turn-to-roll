@@ -3,7 +3,7 @@ import type { Character } from './character.type'
 
 export const characterStore = writable(new Array<Character>())
 
-const numberOfCharactersToSend: number = 2
+const numberOfCharactersToSend: number = 3
 
 export const charactersToSend = (c: Character[], from: number = 0) => {
   const sorted = [...c]

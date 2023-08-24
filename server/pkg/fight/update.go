@@ -23,6 +23,7 @@ func Update(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	session.SetMessage(int(sessionId), req.Payload)
 	session.SendMessage(int(sessionId), req.Payload)
 	w.WriteHeader(http.StatusOK)
 }
