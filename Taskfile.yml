@@ -11,7 +11,7 @@ tasks:
       - task: build:frontend
     dir: server
     cmds:
-      - cp -r ../frontend/dist cmd/
-      - go build -o web cmd/main.go
-      - rm -rf cmd/dist
+      - cp -r ../frontend/dist pkg/public
+      - go build -tags embed -o web cmd/main.go
+      - rm -rf pkg/public/dist
       - mv web ../web

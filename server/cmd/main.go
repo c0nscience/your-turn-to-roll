@@ -4,6 +4,7 @@ import (
 	"context"
 	"embed"
 	"github.com/c0nscience/your-turn-to-roll/pkg/fight"
+	"github.com/c0nscience/your-turn-to-roll/pkg/public"
 	"github.com/c0nscience/your-turn-to-roll/pkg/session"
 	"github.com/gorilla/mux"
 	"github.com/rs/cors"
@@ -15,9 +16,6 @@ import (
 	"path/filepath"
 	"time"
 )
-
-//go:embed dist/*
-var staticFiles embed.FS
 
 type spaHandler struct {
 	staticFS   embed.FS
@@ -63,12 +61,14 @@ func main() {
 	r.HandleFunc("/api/fight/{id}/update", fight.Update).Methods(http.MethodPost, http.MethodOptions)
 	r.HandleFunc("/api/fight/{id}/ws", fight.Sync)
 
-	spa := spaHandler{
-		staticFS:   staticFiles,
-		staticPath: "dist",
-		indexPath:  "index.html",
+	if public.IsEmbedded {
+		spa := spaHandler{
+			staticFS:   public.Box,
+			staticPath: "dist",
+			indexPath:  "index.html",
+		}
+		r.PathPrefix("/").Handler(spa)
 	}
-	r.PathPrefix("/").Handler(spa)
 
 	corsOpts := cors.New(cors.Options{
 		AllowedOrigins: []string{

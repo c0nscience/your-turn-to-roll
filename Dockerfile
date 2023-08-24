@@ -12,11 +12,11 @@ RUN apk add -U --no-cache ca-certificates
 
 WORKDIR /app
 
-COPY --from=webbuilder /app/frontend/dist/ /app/server/cmd/dist/
+COPY --from=webbuilder /app/frontend/dist/ /app/server/pkg/public/dist/
 
 COPY . .
 
-RUN cd server && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o web cmd/main.go
+RUN cd server && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -tags embed -o web cmd/main.go
 
 FROM scratch
 
