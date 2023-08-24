@@ -2,27 +2,73 @@ package main
 
 import (
 	"context"
+	"embed"
 	"github.com/c0nscience/your-turn-to-roll/pkg/fight"
 	"github.com/c0nscience/your-turn-to-roll/pkg/session"
 	"github.com/gorilla/mux"
 	"github.com/rs/cors"
+	"io/fs"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
+	"path/filepath"
 	"time"
 )
+
+//go:embed public/*
+var staticFiles embed.FS
+
+type spaHandler struct {
+	staticFS   embed.FS
+	staticPath string
+	indexPath  string
+}
+
+func (h spaHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	path, err := filepath.Abs(r.URL.Path)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	path = filepath.Join(h.staticPath, path)
+
+	_, err = h.staticFS.Open(path)
+	if os.IsNotExist(err) {
+		index, err := h.staticFS.ReadFile(filepath.Join(h.staticPath, h.indexPath))
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		w.Header().Set("Content-Type", "text/html; charset=utf-8")
+		w.WriteHeader(http.StatusAccepted)
+		w.Write(index)
+		return
+	} else if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	statics, err := fs.Sub(h.staticFS, h.staticPath)
+	http.FileServer(http.FS(statics)).ServeHTTP(w, r)
+}
 
 func main() {
 	log.Println("starting server")
 
 	r := mux.NewRouter()
-	// Add your routes as needed
 
 	r.HandleFunc("/api/session/start", session.Start).Methods(http.MethodGet, http.MethodOptions)
 	r.HandleFunc("/api/fight/start", fight.Start).Methods(http.MethodPost, http.MethodOptions)
 	r.HandleFunc("/api/fight/{id}/update", fight.Update).Methods(http.MethodPost, http.MethodOptions)
 	r.HandleFunc("/api/fight/{id}/ws", fight.Sync)
+
+	spa := spaHandler{
+		staticFS:   staticFiles,
+		staticPath: "public",
+		indexPath:  "index.html",
+	}
+	r.PathPrefix("/").Handler(spa)
 
 	corsOpts := cors.New(cors.Options{
 		AllowedOrigins: []string{
@@ -39,15 +85,13 @@ func main() {
 	})
 
 	srv := &http.Server{
-		Addr: ":8081",
-		// Good practice to set timeouts to avoid Slowloris attacks.
+		Addr:         ":8081",
 		WriteTimeout: time.Second * 15,
 		ReadTimeout:  time.Second * 15,
 		IdleTimeout:  time.Second * 60,
-		Handler:      corsOpts.Handler(r), // Pass our instance of gorilla/mux in.
+		Handler:      corsOpts.Handler(r),
 	}
 
-	// Run our server in a goroutine so that it doesn't block.
 	go func() {
 		log.Println("server started on 8081")
 
@@ -57,22 +101,14 @@ func main() {
 	}()
 
 	c := make(chan os.Signal, 1)
-	// We'll accept graceful shutdowns when quit via SIGINT (Ctrl+C)
-	// SIGKILL, SIGQUIT or SIGTERM (Ctrl+/) will not be caught.
 	signal.Notify(c, os.Interrupt, os.Kill)
 
-	// Block until we receive our signal.
 	<-c
 
-	// Create a deadline to wait for.
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*20)
 	defer cancel()
-	// Doesn't block if no connections, but will otherwise wait
-	// until the timeout deadline.
 	srv.Shutdown(ctx)
-	// Optionally, you could run srv.Shutdown in a goroutine and block on
-	// <-ctx.Done() if your application should wait for other services
-	// to finalize based on context cancellation.
+
 	log.Println("shutting down")
 	os.Exit(0)
 }
