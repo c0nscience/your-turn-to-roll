@@ -16,13 +16,18 @@ var upgrader = websocket.Upgrader{
 }
 
 func Sync(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	sessionId, _ := strconv.ParseInt(vars["id"], 10, 32)
+
+	if !session.Exists(int(sessionId)) {
+		w.WriteHeader(http.StatusNotFound)
+	}
+
 	ws, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Println(err)
 	}
 
-	vars := mux.Vars(r)
-	sessionId, _ := strconv.ParseInt(vars["id"], 10, 32)
 	session.AddConnection(int(sessionId), ws)
 	session.SendLastMessage(int(sessionId))
 }

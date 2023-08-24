@@ -23,6 +23,11 @@ type Message struct {
 	Payload []string    `json:"payload"`
 }
 
+func Exists(id int) bool {
+	_, ok := sessions[id]
+	return ok
+}
+
 func SetMessage(id int, msg []string) {
 	session, ok := sessions[id]
 	if !ok {

@@ -4,12 +4,12 @@ import { expect } from 'vitest'
 import userEvent from '@testing-library/user-event'
 
 describe('StartFightButton', () => {
-    const user = userEvent.setup()
-    test('render', () => {
-        const {getByRole} = render(StartFightButton)
+  const user = userEvent.setup()
+  test('render', () => {
+    const {getByRole} = render(StartFightButton)
 
-        const component = getByRole('button')
+    const component = getByRole('button')
 
-        expect(component).toHaveTextContent("Start")
-    })
+    expect(component).toHaveTextContent('Start')
+  })
 })
