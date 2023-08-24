@@ -23,5 +23,6 @@ func Start(w http.ResponseWriter, r *http.Request) {
 	log.Printf("received: %v", req)
 
 	session.SetMessage(req.SessionId, req.Payload)
+	session.SendMessage(req.SessionId, req.Payload)
 	w.WriteHeader(http.StatusOK)
 }

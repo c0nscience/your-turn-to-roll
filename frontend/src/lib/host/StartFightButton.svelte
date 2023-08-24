@@ -2,8 +2,8 @@
 
     import { characterStore } from './characterStore'
     import { apiUrl } from '../api/config'
-    import { sessionIdStore } from './sessionStore'
-    import { modeStore } from './modeStore'
+    import { sessionIdStore } from '../common/sessionStore'
+    import { modeStore } from '../common/modeStore'
 
     const handleClick = async () => {
         const payload = [...$characterStore]

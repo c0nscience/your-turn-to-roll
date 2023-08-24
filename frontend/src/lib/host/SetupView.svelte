@@ -2,7 +2,7 @@
     import CharacterForm from "./CharacterForm.svelte";
     import CharacterSetupList from "./CharacterSetupList.svelte";
     import StartFightButton from "./StartFightButton.svelte";
-    import {sessionIdStore} from "./sessionStore";
+    import {sessionIdStore} from "../common/sessionStore";
 </script>
 
 <div class="p-5">
