@@ -1,0 +1,17 @@
+version: '3'
+
+tasks:
+  build:frontend:
+    dir: frontend
+    cmds:
+      - npm ci
+      - npm run build
+  build:server:
+    deps:
+      - task: build:frontend
+    dir: server
+    cmds:
+      - cp -r ../frontend/dist cmd/
+      - go build -o web cmd/main.go
+      - rm -rf cmd/dist
+      - mv web ../web
