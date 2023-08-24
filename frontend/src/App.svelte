@@ -13,7 +13,7 @@
     const json = await resp.json()
 
     $sessionIdStore = json.id
-    $modeStore = 'host'
+    $modeStore = 'setup'
   }
 
   const handleClientClicked = () => {
@@ -29,7 +29,7 @@
       <button class="btn" on:click={handleHostClicked}>Host</button>
     </div>
   {/if}
-  {#if $modeStore === 'host'}
+  {#if $modeStore === 'setup'}
     <SetupView/>
   {/if}
   {#if $modeStore === 'fight'}

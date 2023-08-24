@@ -21,6 +21,7 @@ func main() {
 
 	r.HandleFunc("/api/session/start", session.Start).Methods(http.MethodGet, http.MethodOptions)
 	r.HandleFunc("/api/fight/start", fight.Start).Methods(http.MethodPost, http.MethodOptions)
+	r.HandleFunc("/api/fight/{id}/update", fight.Update).Methods(http.MethodPost, http.MethodOptions)
 	r.HandleFunc("/api/fight/{id}/ws", fight.Sync)
 
 	corsOpts := cors.New(cors.Options{
@@ -38,7 +39,7 @@ func main() {
 	})
 
 	srv := &http.Server{
-		Addr: "0.0.0.0:8081",
+		Addr: ":8081",
 		// Good practice to set timeouts to avoid Slowloris attacks.
 		WriteTimeout: time.Second * 15,
 		ReadTimeout:  time.Second * 15,

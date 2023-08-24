@@ -1,5 +1,6 @@
 import type { Writable } from 'svelte/store'
 import { writable } from 'svelte/store'
+import { apiUrl, apiWsUrl } from '../api/config'
 
 export const namesStore: Writable<string[]> = writable([])
 
@@ -11,7 +12,7 @@ interface Message {
 }
 
 export const connect = (id: number) => {
-  socket = new WebSocket(`ws://localhost:8081/api/fight/${id}/ws`)
+  socket = new WebSocket(`${apiWsUrl}/fight/${id}/ws`)
   const promise = new Promise<void>((resolve, reject) => {
     socket.onerror = ev => {
       reject()

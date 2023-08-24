@@ -1,15 +1,12 @@
 <script lang="ts">
 
-  import { characterStore } from './characterStore'
+  import { characterStore, charactersToSend } from './characterStore'
   import { apiUrl } from '../api/config'
   import { sessionIdStore } from '../common/sessionStore'
   import { modeStore } from '../common/modeStore'
 
   const handleClick = async () => {
-    const payload = [...$characterStore]
-      .sort((a, b) => b.initiative - a.initiative)
-      .slice(0, 2)
-      .map(c => c.name)
+    const payload = charactersToSend($characterStore)
     await fetch(`${apiUrl}/fight/start`, {
       method: 'POST',
       mode: 'cors',
@@ -17,9 +14,9 @@
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        sessionId: $sessionIdStore,
-        payload,
-      }),
+                             sessionId: $sessionIdStore,
+                             payload,
+                           }),
     })
 
     $modeStore = 'fight'

@@ -21,11 +21,14 @@ func Sync(w http.ResponseWriter, r *http.Request) {
 
 	if !session.Exists(int(sessionId)) {
 		w.WriteHeader(http.StatusNotFound)
+		return
 	}
 
 	ws, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Println(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 
 	session.AddConnection(int(sessionId), ws)

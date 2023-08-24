@@ -17,6 +17,7 @@ func Start(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Printf("could not marshal json: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 
 	w.WriteHeader(http.StatusOK)

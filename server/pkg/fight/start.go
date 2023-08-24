@@ -18,6 +18,7 @@ func Start(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Printf("could not unmarshal body: %v\n", err)
 		w.WriteHeader(http.StatusBadRequest)
+		return
 	}
 
 	log.Printf("received: %v", req)
