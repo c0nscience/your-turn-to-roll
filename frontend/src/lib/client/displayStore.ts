@@ -12,9 +12,15 @@ interface Message {
 
 export const connect = (id: number) => {
   socket = new WebSocket(`ws://localhost:8081/api/fight/${id}/ws`)
-  socket.onerror = ev => {
-    console.log('error', ev)
-  }
+  const promise = new Promise<void>((resolve, reject) => {
+    socket.onerror = ev => {
+      reject()
+    }
+
+    socket.onopen = ev => {
+      resolve()
+    }
+  })
   socket.onmessage = evt => {
     console.log('message received', evt.data)
     const msg = JSON.parse(evt.data) as Message
@@ -28,4 +34,6 @@ export const connect = (id: number) => {
         }
     }
   }
+
+  return promise
 }

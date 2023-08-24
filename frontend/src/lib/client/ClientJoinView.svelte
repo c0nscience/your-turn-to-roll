@@ -3,13 +3,20 @@
   import { connect } from './displayStore'
   import { modeStore } from '../common/modeStore'
   import { sessionIdStore } from '../common/sessionStore'
+  import ConfirmationDialog from '../common/ConfirmationDialog.svelte'
 
   let sessionId: number | null = null
+  let dialog: HTMLDialogElement
 
   const handleJoin = () => {
     connect(sessionId!)
-    $sessionIdStore = sessionId!
-    $modeStore = 'client-fight'
+      .then(() => {
+        $sessionIdStore = sessionId!
+        $modeStore = 'client-fight'
+      })
+      .catch(() => {
+        dialog.showModal()
+      })
   }
 </script>
 
@@ -22,3 +29,10 @@
     </button>
   </div>
 </div>
+
+<ConfirmationDialog bind:dialog id="connection-failed"
+                    headline="Not found"
+                    msg="Session does not exist."
+                    on:confirm={() => {
+                      dialog.close()
+                    }}/>
