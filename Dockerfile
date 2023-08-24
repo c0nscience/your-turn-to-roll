@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN cd frontend && rm -rf node_modules && npm ci && npm run build
+RUN cd frontend && npm ci && npm run build
 
 FROM golang:alpine as builder
 
@@ -12,7 +12,7 @@ RUN apk add -U --no-cache ca-certificates
 
 WORKDIR /app
 
-COPY --from=webbuilder /app/frontend/public/ /app/server/cmd/public/
+COPY --from=webbuilder /app/frontend/dist/ /app/server/cmd/dist/
 
 COPY . .
 

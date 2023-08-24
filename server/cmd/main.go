@@ -16,7 +16,7 @@ import (
 	"time"
 )
 
-//go:embed public/*
+//go:embed dist/*
 var staticFiles embed.FS
 
 type spaHandler struct {
@@ -65,7 +65,7 @@ func main() {
 
 	spa := spaHandler{
 		staticFS:   staticFiles,
-		staticPath: "public",
+		staticPath: "dist",
 		indexPath:  "index.html",
 	}
 	r.PathPrefix("/").Handler(spa)
