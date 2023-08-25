@@ -2,6 +2,7 @@
 
   import { characterStore } from './characterStore'
   import ConfirmationDialog from '../common/ConfirmationDialog.svelte'
+  import CharacterSetupListEntry from './CharacterSetupListEntry.svelte'
 
   $: entries = [...$characterStore].sort((a, b) => b.initiative - a.initiative)
 
@@ -31,11 +32,7 @@
   <!-- row 1 -->
   {#each entries as character (character.id)}
     <tr>
-      <th>{character.initiative}</th>
-      <td>{character.name}</td>
-      <td>
-        <button class="btn btn-error" on:click={() => {handleDeleteClicked(character.id)}}>del</button>
-      </td>
+      <CharacterSetupListEntry bind:character on:delete={evt => {handleDeleteClicked(evt.detail.id)}}/>
     </tr>
   {/each}
   </tbody>

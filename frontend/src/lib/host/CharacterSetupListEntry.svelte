@@ -1,7 +1,22 @@
 <script lang="ts">
-  export let name: string
-  export let initiative: number
+  import type { Character } from './character.type'
+  import { createEventDispatcher } from 'svelte'
+
+  export let character: Character
+
+  const dispatcher = createEventDispatcher()
+
+  const handleDelete = () => {
+      dispatcher('delete', {
+          id: character.id
+      })
+  }
 </script>
 
-<div>{name}</div>
-<div>{initiative}</div>
+<td>
+    <input placeholder="Initiative" bind:value={character.initiative} type="number" step="0.1" inputmode="numeric" class="input input-bordered w-24"/>
+</td>
+<td><input placeholder="Name" bind:value={character.name} type="text" class="input input-bordered w-full"/></td>
+<td>
+    <button class="btn btn-error" on:click={handleDelete}>del</button>
+</td>
