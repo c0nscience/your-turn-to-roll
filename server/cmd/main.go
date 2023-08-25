@@ -11,6 +11,7 @@ import (
 	"github.com/rs/cors"
 	"io/fs"
 	"log"
+	"net"
 	"net/http"
 	"os"
 	"os/signal"
@@ -100,7 +101,8 @@ func main() {
 	}
 
 	go func() {
-		log.Println("server started on 8081")
+		log.Println("server started")
+		log.Printf("available under: http://%s:8081\n", GetOutboundIP().String())
 
 		if err := srv.ListenAndServe(); err != nil {
 			log.Println(err)
@@ -118,4 +120,16 @@ func main() {
 
 	log.Println("shutting down")
 	os.Exit(0)
+}
+
+func GetOutboundIP() net.IP {
+	conn, err := net.Dial("udp", "1.1.1.1:80")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer conn.Close()
+
+	localAddr := conn.LocalAddr().(*net.UDPAddr)
+
+	return localAddr.IP
 }
