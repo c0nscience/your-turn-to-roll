@@ -20,6 +20,15 @@ go run cmd/main.go
 
 Or use the run configurations for intellij within this repository.
 
+### Local environment
+
+create a `env.local` file in the frontend folder with the following content:
+
+```text
+VITE_API_URL=http://{your-internal-ip}:8081/api
+VITE_WS_API_URL=ws://{your-internal-ip}:8081/api
+```
+
 ## Building
 
 Either build the docker image or use `task build:server` which will generate a binary called `web` which contains the server and the frontend, which is being served by the server (on port `8081`).
