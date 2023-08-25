@@ -16,6 +16,7 @@ func Update(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	sessionId, _ := strconv.ParseInt(vars["id"], 10, 32)
 
+	w.Header().Set("Content-Type", "application/json")
 	var req updateReq
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
@@ -25,5 +26,4 @@ func Update(w http.ResponseWriter, r *http.Request) {
 
 	session.SetMessage(int(sessionId), req.Payload)
 	session.SendMessage(int(sessionId), req.Payload)
-	w.WriteHeader(http.StatusOK)
 }

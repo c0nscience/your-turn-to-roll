@@ -6,6 +6,7 @@ import (
 	"github.com/c0nscience/your-turn-to-roll/pkg/fight"
 	"github.com/c0nscience/your-turn-to-roll/pkg/public"
 	"github.com/c0nscience/your-turn-to-roll/pkg/session"
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/rs/cors"
 	"io/fs"
@@ -56,6 +57,7 @@ func main() {
 
 	r := mux.NewRouter()
 
+	r.HandleFunc("/api/session/{id}/continue", session.Continue).Methods(http.MethodGet, http.MethodOptions)
 	r.HandleFunc("/api/session/start", session.Start).Methods(http.MethodGet, http.MethodOptions)
 	r.HandleFunc("/api/fight/start", fight.Start).Methods(http.MethodPost, http.MethodOptions)
 	r.HandleFunc("/api/fight/{id}/update", fight.Update).Methods(http.MethodPost, http.MethodOptions)
@@ -70,26 +72,30 @@ func main() {
 		r.PathPrefix("/").Handler(spa)
 	}
 
-	corsOpts := cors.New(cors.Options{
-		AllowedOrigins: []string{
-			"*",
-		},
-		AllowedMethods: []string{
-			http.MethodGet,
-			http.MethodPost,
-			http.MethodPut,
-			http.MethodDelete,
-			http.MethodHead,
-		},
-		AllowedHeaders: []string{"*"},
-	})
+	var handler http.Handler = r
+	if !public.IsEmbedded {
+		corsOpts := cors.New(cors.Options{
+			AllowedOrigins: []string{
+				"*",
+			},
+			AllowedMethods: []string{
+				http.MethodGet,
+				http.MethodPost,
+				http.MethodPut,
+				http.MethodDelete,
+				http.MethodHead,
+			},
+			AllowedHeaders: []string{"*"},
+		})
+		handler = corsOpts.Handler(r)
+	}
 
 	srv := &http.Server{
 		Addr:         ":8081",
 		WriteTimeout: time.Second * 15,
 		ReadTimeout:  time.Second * 15,
 		IdleTimeout:  time.Second * 60,
-		Handler:      corsOpts.Handler(r),
+		Handler:      handlers.LoggingHandler(os.Stdout, handler),
 	}
 
 	go func() {

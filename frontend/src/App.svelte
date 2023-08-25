@@ -7,13 +7,10 @@
   import { modeStore } from './lib/common/modeStore'
   import ClientFightView from './lib/client/ClientFightView.svelte'
   import HostFightView from './lib/host/HostFightView.svelte'
+  import HostJoinView from './lib/host/HostJoinView.svelte'
 
-  const handleHostClicked = async () => {
-    const resp = await fetch(`${apiUrl}/session/start`)
-    const json = await resp.json()
-
-    $sessionIdStore = json.id
-    $modeStore = 'setup'
+  const handleHostClicked = () => {
+    $modeStore = 'join-setup'
   }
 
   const handleClientClicked = () => {
@@ -28,6 +25,9 @@
 
       <button class="btn" on:click={handleHostClicked}>Host</button>
     </div>
+  {/if}
+  {#if $modeStore === 'join-setup'}
+    <HostJoinView/>
   {/if}
   {#if $modeStore === 'setup'}
     <SetupView/>

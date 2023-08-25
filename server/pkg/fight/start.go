@@ -13,6 +13,7 @@ type startReq struct {
 }
 
 func Start(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 	var req startReq
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
@@ -25,5 +26,4 @@ func Start(w http.ResponseWriter, r *http.Request) {
 
 	session.SetMessage(req.SessionId, req.Payload)
 	session.SendMessage(req.SessionId, req.Payload)
-	w.WriteHeader(http.StatusOK)
 }
