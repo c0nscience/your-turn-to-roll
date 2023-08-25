@@ -6,8 +6,15 @@ import (
 )
 
 type Session struct {
-	Conns   []*websocket.Conn
-	Message []string
+	Conns      []*websocket.Conn
+	Message    []string
+	Characters []Character
+}
+
+type Character struct {
+	Id         string  `json:"id"`
+	Name       string  `json:"name"`
+	Initiative float32 `json:"initiative"`
 }
 
 var sessions = map[int]*Session{}
@@ -26,6 +33,11 @@ type Message struct {
 func Exists(id int) bool {
 	_, ok := sessions[id]
 	return ok
+}
+
+func Get(id int) (*Session, bool) {
+	session, ok := sessions[id]
+	return session, ok
 }
 
 func SetMessage(id int, msg []string) {

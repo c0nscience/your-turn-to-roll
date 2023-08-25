@@ -4,6 +4,7 @@
     import { sessionIdStore } from '../common/sessionStore'
     import { modeStore } from '../common/modeStore'
     import ConfirmationDialog from '../common/ConfirmationDialog.svelte'
+    import { characterStore } from './characterStore'
 
     let sessionId: number | null = null
     let dialog: HTMLDialogElement
@@ -18,6 +19,7 @@
                 const resp = await fetch(`${apiUrl}/session/${sessionId}/continue`)
                 const json = await resp.json()
                 $sessionIdStore = json.id
+                $characterStore = json.characters
                 $modeStore = 'setup'
             } catch {
                 dialog.showModal()

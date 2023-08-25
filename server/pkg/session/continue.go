@@ -11,16 +11,21 @@ func Continue(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	sessionId, _ := strconv.ParseInt(vars["id"], 10, 32)
 
-	if !Exists(int(sessionId)) {
+	session, ok := Get(int(sessionId))
+	if !ok {
 		http.NotFound(w, r)
 		return
 	}
 	type resp struct {
-		Id int `json:"id"`
+		Id         int         `json:"id"`
+		Characters []Character `json:"characters"`
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	err := json.NewEncoder(w).Encode(resp{Id: int(sessionId)})
+	err := json.NewEncoder(w).Encode(resp{
+		Id:         int(sessionId),
+		Characters: session.Characters,
+	})
 	if err != nil {
 		http.Error(w, "could not marshal json", http.StatusInternalServerError)
 		return
