@@ -6,6 +6,7 @@ import (
 )
 
 type Session struct {
+	Key        string
 	Conns      []*websocket.Conn
 	Message    []string
 	Characters []Character
@@ -85,4 +86,12 @@ func SendMessage(id int, msg []string) {
 		validConnections = append(validConnections, conn)
 	}
 	session.Conns = validConnections
+}
+
+func Create(id int) *Session {
+	res := &Session{
+		Characters: []Character{},
+	}
+	sessions[id] = res
+	return res
 }

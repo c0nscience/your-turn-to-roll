@@ -57,7 +57,7 @@ func main() {
 
 	r := mux.NewRouter()
 
-	r.HandleFunc("/api/session/{id}/continue", session.Continue).Methods(http.MethodGet, http.MethodOptions)
+	r.HandleFunc("/api/session/{id}/continue", session.Continue).Methods(http.MethodPost, http.MethodOptions)
 	r.HandleFunc("/api/session/{id}", session.Save).Methods(http.MethodPost, http.MethodOptions)
 	r.HandleFunc("/api/session/start", session.Start).Methods(http.MethodGet, http.MethodOptions)
 	r.HandleFunc("/api/fight/start", fight.Start).Methods(http.MethodPost, http.MethodOptions)

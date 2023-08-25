@@ -14,9 +14,9 @@
 </script>
 
 <td>
-    <input placeholder="Initiative" bind:value={character.initiative} type="number" step="0.1" inputmode="numeric" class="input input-bordered w-24"/>
+    <input placeholder="Initiative" bind:value={character.initiative} type="number" step="0.1" inputmode="numeric" class="input w-24"/>
 </td>
-<td><input placeholder="Name" bind:value={character.name} type="text" class="input input-bordered w-full"/></td>
+<td><input placeholder="Name" bind:value={character.name} type="text" class="input w-full"/></td>
 <td>
     <button class="btn btn-error" on:click={handleDelete}>del</button>
 </td>
