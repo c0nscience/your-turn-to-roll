@@ -1,17 +1,11 @@
 version: '3'
 
+includes:
+  build: tasks/build/Taskfile_{{OS}}.yml
+
 tasks:
   build:frontend:
     dir: frontend
     cmds:
       - npm ci
       - npm run build
-  build:server:
-    deps:
-      - task: build:frontend
-    dir: server
-    cmds:
-      - cp -r ../frontend/dist pkg/public
-      - go build -tags embed -o web cmd/main.go
-      - rm -rf pkg/public/dist
-      - mv web ../web

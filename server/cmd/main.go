@@ -15,7 +15,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
-	"path/filepath"
+	"path"
 	"time"
 )
 
@@ -26,16 +26,11 @@ type spaHandler struct {
 }
 
 func (h spaHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	path, err := filepath.Abs(r.URL.Path)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-	path = filepath.Join(h.staticPath, path)
+	p := path.Join(h.staticPath, r.URL.Path)
 
-	_, err = h.staticFS.Open(path)
+	_, err := h.staticFS.Open(p)
 	if os.IsNotExist(err) {
-		index, err := h.staticFS.ReadFile(filepath.Join(h.staticPath, h.indexPath))
+		index, err := h.staticFS.ReadFile(path.Join(h.staticPath, h.indexPath))
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
