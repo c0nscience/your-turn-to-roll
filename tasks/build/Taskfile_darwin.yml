@@ -10,3 +10,13 @@ tasks:
       - go build -tags embed -o web cmd/main.go
       - rm -rf pkg/public/dist
       - mv web ../web
+
+  server:pi:
+    deps:
+      - task: :build:frontend
+    dir: server
+    cmds:
+      - cp -r ../frontend/dist pkg/public
+      - GOOS=linux GOARCH=arm GOARM=5 go build -tags embed -o web cmd/main.go
+      - rm -rf pkg/public/dist
+      - mv web ../web

@@ -3,3 +3,5 @@ version: '3'
 tasks:
   server:
     cmd: pwsh Build-Server.ps1
+  server:pi:
+    cmd: pwsh Build-Server-Pi.ps1
