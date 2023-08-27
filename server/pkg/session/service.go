@@ -10,7 +10,7 @@ import (
 type Session struct {
 	Key        string            `json:"key"`
 	Conns      []*websocket.Conn `json:"-"`
-	Message    []string          `json:"message"`
+	Message    []string          `json:"-"`
 	Characters []Character       `json:"characters"`
 }
 
