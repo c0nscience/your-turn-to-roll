@@ -104,6 +104,14 @@ func main() {
 		}
 	}()
 
+	session.Load()
+	go func() {
+		for now := range time.Tick(10 * time.Second) {
+			session.Persist()
+			log.Printf("persist complete: %dµs", time.Now().Sub(now).Microseconds())
+		}
+	}()
+
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt, os.Kill)
 

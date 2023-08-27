@@ -1,15 +1,17 @@
 package session
 
 import (
+	"encoding/json"
 	"github.com/gorilla/websocket"
 	"log"
+	"os"
 )
 
 type Session struct {
-	Key        string
-	Conns      []*websocket.Conn
-	Message    []string
-	Characters []Character
+	Key        string            `json:"key"`
+	Conns      []*websocket.Conn `json:"-"`
+	Message    []string          `json:"message"`
+	Characters []Character       `json:"characters"`
 }
 
 type Character struct {
@@ -25,6 +27,8 @@ type MessageType string
 const (
 	UpdateMessage MessageType = "update"
 )
+
+const sessionStoreFile = "session.json"
 
 type Message struct {
 	Type    MessageType `json:"type"`
@@ -94,4 +98,26 @@ func Create(id int) *Session {
 	}
 	sessions[id] = res
 	return res
+}
+
+func Persist() {
+	file, err := os.Create(sessionStoreFile)
+	if err != nil {
+		log.Printf("could not persist: %v", err)
+		return
+	}
+
+	encoder := json.NewEncoder(file)
+	encoder.SetIndent("", "  ")
+	_ = encoder.Encode(sessions)
+}
+
+func Load() {
+	b, err := os.ReadFile(sessionStoreFile)
+	if err != nil {
+		log.Printf("could not load session store file: %v", err)
+		return
+	}
+
+	_ = json.Unmarshal(b, &sessions)
 }
