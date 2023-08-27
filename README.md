@@ -35,7 +35,7 @@ Description=Your Turn To Roll
 After=multi-user.target
 
 [Service]
-Type=idle
+Type=simple
 ExecStart=/home/pi/web
 
 [Install]
@@ -53,6 +53,11 @@ and now reboot:
 
 ```shell
 sudo reboot
+```
+
+View logs via:
+```shell
+journalctl -e -u yttr
 ```
 
 ## Development

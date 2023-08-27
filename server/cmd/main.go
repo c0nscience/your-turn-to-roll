@@ -104,7 +104,9 @@ func main() {
 		}
 	}()
 
+	log.Println("loading sessions")
 	session.Load()
+	log.Println("sessions loaded")
 	go func() {
 		for now := range time.Tick(10 * time.Second) {
 			session.Persist()

@@ -21,6 +21,7 @@ type Character struct {
 }
 
 var sessions = map[int]*Session{}
+var loaded = false
 
 type MessageType string
 
@@ -101,6 +102,10 @@ func Create(id int) *Session {
 }
 
 func Persist() {
+	if !loaded {
+		log.Printf("not sessions loaded yet ...")
+		return
+	}
 	file, err := os.Create(sessionStoreFile)
 	if err != nil {
 		log.Printf("could not persist: %v", err)
@@ -120,4 +125,5 @@ func Load() {
 	}
 
 	_ = json.Unmarshal(b, &sessions)
+	loaded = true
 }
