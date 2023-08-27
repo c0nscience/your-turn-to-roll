@@ -1,0 +1,11 @@
+version: 3
+
+tasks:
+  pi:
+    deps:
+      - task: :build:server:pi
+    desc: Builds a binary for raspberry pi OS 32bit and stops the setup service 'yttr' from systemd, copies the new binary to the raspberry pi under 'raspberrypi.local' and starts the service again
+    cmds:
+      - cmd: ssh -t pi@raspberrypi.local sudo systemctl stop yttr
+      - cmd: scp 'web' 'pi@raspberrypi.local:'
+      - cmd: ssh -t pi@raspberrypi.local sudo systemctl start yttr

@@ -2,9 +2,11 @@ version: '3'
 
 includes:
   build: tasks/build/Taskfile_{{OS}}.yml
+  deploy: tasks/deploy
 
 tasks:
   build:frontend:
+    desc: Executes 'npm run dev' to create a production build of the frontend
     dir: frontend
     cmds:
       - npm ci

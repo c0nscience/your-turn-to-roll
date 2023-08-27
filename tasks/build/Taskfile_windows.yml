@@ -2,6 +2,8 @@ version: '3'
 
 tasks:
   server:
+    desc: Compiles the server with an embedded frontend into a platform specific binary
     cmd: pwsh Build-Server.ps1
   server:pi:
+    desc: Compiles the server with an embedded frontend into a binary for raspberry pi OS 32bit
     cmd: pwsh Build-Server-Pi.ps1
