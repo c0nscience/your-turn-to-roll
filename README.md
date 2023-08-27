@@ -24,7 +24,7 @@ task: Available tasks for this project:
 Create a service file:
 
 ```shell
-vim cat /lib/systemd/system/yttr.service
+vim /lib/systemd/system/yttr.service
 ```
 
 with the following content:
