@@ -79,7 +79,7 @@ Or use the run configurations for intellij within this repository.
 
 ### Local environment
 
-create a `env.local` file in the `frontend` folder with the following content:
+create a `.env.local` file in the `frontend` folder with the following content:
 
 ```text
 VITE_API_URL=http://{your-internal-ip}:8081/api
