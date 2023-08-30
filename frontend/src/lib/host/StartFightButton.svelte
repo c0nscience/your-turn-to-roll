@@ -4,19 +4,11 @@
     import { apiUrl } from '../api/config'
     import { sessionIdStore } from '../common/sessionStore'
     import { modeStore } from '../common/modeStore'
+    import { save } from '../api/client'
 
     const handleClick = async () => {
         const payload = charactersToSend($characterStore)
-        await fetch(`${apiUrl}/session/${$sessionIdStore}`, {
-            method: 'POST',
-            mode: 'cors',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                                     characters: $characterStore,
-                                 }),
-        })
+      await save($characterStore, $sessionIdStore)
         await fetch(`${apiUrl}/fight/start`, {
             method: 'POST',
             mode: 'cors',

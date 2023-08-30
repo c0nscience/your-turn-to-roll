@@ -11,12 +11,12 @@
 
   const deleteCharacter = (id: string) => {
     $characterStore = $characterStore.filter(character => character.id !== id)
-  }
+  };
 
   const handleDeleteClicked = (id: string) => {
     idToDelete = id
     dialog.showModal()
-  }
+  };
 </script>
 
 <table class="table mb-5">
@@ -39,8 +39,11 @@
 </table>
 
 
-<ConfirmationDialog bind:dialog id="confirm-delete" msg="Do you really want to delete this entry?" on:confirm={() => {
-    deleteCharacter(idToDelete)
-    dialog.close()
-    idToDelete = ''
-}}/>
+<ConfirmationDialog bind:dialog
+                    id="confirm-delete"
+                    msg="Do you really want to delete this entry?"
+                    on:confirm={() => {
+                      deleteCharacter(idToDelete)
+                      dialog.close()
+                      idToDelete = ''
+                    }}/>

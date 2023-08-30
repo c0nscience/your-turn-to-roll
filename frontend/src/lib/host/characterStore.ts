@@ -5,6 +5,8 @@ export const characterStore = writable(new Array<Character>())
 
 const numberOfCharactersToSend: number = 3
 
+export const byInitiativeDesc = (a: Character, b: Character) => b.initiative - a.initiative
+
 export const charactersToSend = (c: Character[], from: number = 0) => {
   const sorted = [...c]
     .sort((a, b) => b.initiative - a.initiative)

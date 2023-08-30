@@ -5,6 +5,7 @@ import (
 	"github.com/gorilla/websocket"
 	"log"
 	"os"
+	"path/filepath"
 )
 
 type Session struct {
@@ -118,6 +119,9 @@ func Persist() {
 }
 
 func Load() {
+	loaded = true
+	abs, _ := filepath.Abs(sessionStoreFile)
+	log.Printf("session store file path: %s", abs)
 	b, err := os.ReadFile(sessionStoreFile)
 	if err != nil {
 		log.Printf("could not load session store file: %v", err)
@@ -125,5 +129,4 @@ func Load() {
 	}
 
 	_ = json.Unmarshal(b, &sessions)
-	loaded = true
 }

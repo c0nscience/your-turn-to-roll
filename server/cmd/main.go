@@ -108,7 +108,7 @@ func main() {
 	session.Load()
 	log.Println("sessions loaded")
 	go func() {
-		for now := range time.Tick(10 * time.Second) {
+		for now := range time.Tick(time.Minute) {
 			session.Persist()
 			log.Printf("persist complete: %dµs", time.Now().Sub(now).Microseconds())
 		}
