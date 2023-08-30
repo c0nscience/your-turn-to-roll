@@ -27,17 +27,16 @@ export const connect = (id: number) => {
     }
   })
   socket.onmessage = evt => {
-    console.log('message received', evt.data)
     const msg = JSON.parse(evt.data) as Message
-    console.log('message', typeof msg)
-    console.log('message', msg.type)
     switch (msg.type) {
       case 'update':
-        console.log('update message: ', msg)
         if (msg.payload) {
           namesStore.set(msg.payload)
         }
     }
+  }
+  socket.onerror = ev => {
+    console.log('socket error', ev)
   }
 
   return promise

@@ -2,6 +2,8 @@
 
   import { sessionIdStore } from '../common/sessionStore'
   import { namesStore } from './displayStore'
+  import { receive, send } from './transition'
+  import { flip } from 'svelte/animate'
 </script>
 
 <div class="grid grid-cols-1 p-5 h-full place-content-center">
@@ -18,7 +20,11 @@
         </thead>
         <tbody>
         {#each $namesStore as name, i (name)}
-          <tr class={i === 0 ? 'bg-accent text-gray-900 text-5xl': 'text-2xl'}>
+          <tr class={i === 0 ? 'bg-accent text-gray-900 text-5xl': 'text-2xl'}
+              in:receive={{key: name}}
+              out:send={{key: name}}
+              animate:flip={{duration: 400}}
+          >
             <th>{name}</th>
           </tr>
         {/each}
