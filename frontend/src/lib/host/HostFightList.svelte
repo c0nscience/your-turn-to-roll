@@ -6,6 +6,8 @@
   import { sessionIdStore } from '../common/sessionStore'
   import { sendUpdateToClients } from '../api/client'
   import { save } from '../api/client.js'
+  import EyeClosed from '../../assets/EyeClosed.svelte'
+  import Eye from '../../assets/Eye.svelte'
 
   $: entries = [...$characterStore].sort(byInitiativeDesc)
   $: entries, sendUpdateToClients(entries, $currentIdxStore, $sessionIdStore)
@@ -26,6 +28,17 @@
     idToDelete = id
     dialog.showModal()
   }
+
+  const handleHideClicked = (id: string) => {
+    $characterStore = $characterStore.map(character => {
+      if (character.id === id) {
+        character.hidden = !character.hidden
+      }
+      return character
+    })
+
+    save($characterStore, $sessionIdStore)
+  }
 </script>
 
 <table class="table mb-5">
@@ -34,7 +47,7 @@
   <tr>
     <th></th>
     <th>Name</th>
-    <th class="w-20"></th>
+    <th class="w-40"></th>
   </tr>
   </thead>
   <tbody>
@@ -43,7 +56,16 @@
     <tr class:bg-accent={isTheTurnOf(i)}>
       <th class:text-accent-content={isTheTurnOf(i)}>{character.initiative}</th>
       <td class="text-xl" class:text-accent-content={isTheTurnOf(i)}>{character.name}</td>
-      <td>
+      <td class="grid grid-flow-col justify-between">
+        <button class="btn btn-ghost"
+                class:text-accent-content={isTheTurnOf(i)}
+                on:click={() => {handleHideClicked(character.id)}}>
+          {#if (character.hidden)}
+            <EyeClosed/>
+          {:else }
+            <Eye/>
+          {/if}
+        </button>
         <button class="btn btn-ghost"
                 class:text-accent-content={isTheTurnOf(i)}
                 on:click={() => {handleDeleteClicked(character.id)}}>

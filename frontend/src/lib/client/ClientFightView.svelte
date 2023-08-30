@@ -20,7 +20,7 @@
         </thead>
         <tbody>
         {#each $namesStore as name, i (name)}
-          <tr class={i === 0 ? 'bg-accent text-gray-900 text-5xl': 'text-2xl'}
+          <tr class={i === 0 ? 'bg-accent text-gray-900 text-6xl': 'text-4xl'}
               in:receive={{key: name}}
               out:send={{key: name}}
               animate:flip={{duration: 400}}

@@ -7,19 +7,28 @@ const numberOfCharactersToSend: number = 3
 
 export const byInitiativeDesc = (a: Character, b: Character) => b.initiative - a.initiative
 
-export const charactersToSend = (c: Character[], from: number = 0) => {
-  const sorted = [...c]
-    .sort((a, b) => b.initiative - a.initiative)
+export const charactersToSend = (characters: Character[], from: number = 0) => {
+  const sorted = [...characters]
+      .sort(byInitiativeDesc)
 
-  const selectedCharacters = sorted
-    .slice(from, from + numberOfCharactersToSend)
+  const selChar = new Array<Character>()
+  let i = from
+  while (selChar.length < numberOfCharactersToSend) {
+    const c = sorted[i]
 
-  let overflow: Character[] = []
-  if ((from + numberOfCharactersToSend) > sorted.length) {
-    const remaining = (from + numberOfCharactersToSend) - sorted.length
-    overflow = sorted.slice(0, remaining)
+    if (i < sorted.length - 1) {
+      i = i + 1
+    } else {
+      i = 0
+    }
+
+    if (c.hidden) {
+      continue
+    }
+
+    selChar.push(c)
   }
 
-  return [...selectedCharacters, ...overflow]
+  return selChar
     .map(c => c.name)
 }

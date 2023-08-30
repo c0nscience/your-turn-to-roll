@@ -1,10 +1,10 @@
 <script lang="ts">
 
-  import { characterStore } from './characterStore'
-  import ConfirmationDialog from '../common/ConfirmationDialog.svelte'
-  import CharacterSetupListEntry from './CharacterSetupListEntry.svelte'
+    import { characterStore } from './characterStore'
+    import ConfirmationDialog from '../common/ConfirmationDialog.svelte'
+    import CharacterSetupListEntry from './CharacterSetupListEntry.svelte'
 
-  $: entries = [...$characterStore].sort((a, b) => b.initiative - a.initiative)
+    $: entries = [...$characterStore].sort((a, b) => b.initiative - a.initiative)
 
   let idToDelete = ''
   let dialog: HTMLDialogElement
@@ -17,6 +17,16 @@
     idToDelete = id
     dialog.showModal()
   };
+
+  const handleHideClicked = (id: string) => {
+      $characterStore = $characterStore.map(character => {
+          if (character.id === id) {
+              character.hidden = !character.hidden
+          }
+          return character
+      })
+  }
+
 </script>
 
 <table class="table mb-5">
@@ -32,7 +42,9 @@
   <!-- row 1 -->
   {#each entries as character (character.id)}
     <tr>
-      <CharacterSetupListEntry bind:character on:delete={evt => {handleDeleteClicked(evt.detail.id)}}/>
+      <CharacterSetupListEntry bind:character
+                               on:delete={evt => {handleDeleteClicked(evt.detail.id)}}
+                               on:hide={evt => {handleHideClicked(evt.detail.id)}}/>
     </tr>
   {/each}
   </tbody>

@@ -19,6 +19,7 @@ type Character struct {
 	Id         string  `json:"id"`
 	Name       string  `json:"name"`
 	Initiative float32 `json:"initiative"`
+	Hidden     bool    `json:"hidden"`
 }
 
 var sessions = map[int]*Session{}

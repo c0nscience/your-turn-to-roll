@@ -1,8 +1,10 @@
 <script lang="ts">
-  import type { Character } from './character.type'
-  import { createEventDispatcher } from 'svelte'
+    import type { Character } from './character.type'
+    import { createEventDispatcher } from 'svelte'
+    import Eye from '../../assets/Eye.svelte'
+    import EyeClosed from '../../assets/EyeClosed.svelte'
 
-  export let character: Character
+    export let character: Character
 
   const dispatcher = createEventDispatcher()
 
@@ -11,6 +13,12 @@
       id: character.id,
     })
   }
+
+    const handleHide = () => {
+        dispatcher('hide', {
+            id: character.id,
+        })
+    }
 
 </script>
 
@@ -23,6 +31,13 @@
            bind:value={character.name}
            type="text" class="input w-full"/></td>
 <td>
+  <button class="btn btn-ghost" on:click={handleHide}>
+    {#if (character.hidden)}
+      <EyeClosed/>
+    {:else }
+      <Eye/>
+    {/if}
+  </button>
   <button class="btn btn-error" on:click={handleDelete}>
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
       <path fill-rule="evenodd"
