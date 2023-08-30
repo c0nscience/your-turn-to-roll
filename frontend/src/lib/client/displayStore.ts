@@ -35,9 +35,6 @@ export const connect = (id: number) => {
         }
     }
   }
-  socket.onerror = ev => {
-    console.log('socket error', ev)
-  }
 
   return promise
 }

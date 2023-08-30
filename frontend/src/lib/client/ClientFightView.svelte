@@ -1,13 +1,21 @@
 <script lang="ts">
 
-  import { sessionIdStore } from '../common/sessionStore'
-  import { namesStore } from './displayStore'
+  import { connect, namesStore } from './displayStore'
   import { receive, send } from './transition'
   import { flip } from 'svelte/animate'
+  import { sessionIdStore } from '../common/sessionStore'
+
+  let lastVisible = true
+  window.addEventListener('visibilitychange', async (evt) => {
+    const visibilityState = (evt.target as Document).visibilityState
+    if (visibilityState === 'visible' && !lastVisible) {
+      await connect($sessionIdStore)
+    }
+    lastVisible = visibilityState === 'visible'
+  })
 </script>
 
 <div class="grid grid-cols-1 p-5 h-full place-content-center">
-  <h1 class="text-gray-500 text-2xl text-center">Session: {$sessionIdStore}</h1>
 
   <div class="overflow-x-auto">
     {#if $namesStore.length > 0}
