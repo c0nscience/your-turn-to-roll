@@ -33,3 +33,15 @@ jobs:
           args: release --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Write SSH keys
+        run: |
+          install -m 600 -D /dev/null ~/.ssh/id_rsa
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          host='${{ secrets.TARGET_HOST }}'
+          hosts="$(dig +short "$host" | grep -v '\.$' | sed -z 's|\n|,|g')$host"
+          ssh-keyscan -H "$hosts" > ~/.ssh/known_hosts
+      - name: Deploy to remote server
+        run: |
+          ssh -t ${{ secrets.TARGET_USER }}@${{ secrets.TARGET_HOST }} sudo systemctl stop yttr
+          scp server/dist/your-turn-to-roll_linux_amd64_v1/your-turn-to-roll '${{ secrets.TARGET_USER }}@${{ secrets.TARGET_HOST }}:web'
+          ssh -t ${{ secrets.TARGET_USER }}@${{ secrets.TARGET_HOST }} sudo systemctl start yttr
