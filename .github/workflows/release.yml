@@ -42,6 +42,6 @@ jobs:
           ssh-keyscan -H "$hosts" > ~/.ssh/known_hosts
       - name: Deploy to remote server
         run: |
-          ssh -t ${{ secrets.TARGET_USER }}@${{ secrets.TARGET_HOST }} sudo systemctl stop yttr
-          scp server/dist/your-turn-to-roll_linux_amd64_v1/your-turn-to-roll '${{ secrets.TARGET_USER }}@${{ secrets.TARGET_HOST }}:web'
-          ssh -t ${{ secrets.TARGET_USER }}@${{ secrets.TARGET_HOST }} sudo systemctl start yttr
+          ssh -p ${{ secrets.TARGET_PORT }} -t ${{ secrets.TARGET_USER }}@${{ secrets.TARGET_HOST }} sudo systemctl stop yttr
+          scp -p ${{ secrets.TARGET_PORT }} server/dist/your-turn-to-roll_linux_amd64_v1/your-turn-to-roll '${{ secrets.TARGET_USER }}@${{ secrets.TARGET_HOST }}:web'
+          ssh -p ${{ secrets.TARGET_PORT }} -t ${{ secrets.TARGET_USER }}@${{ secrets.TARGET_HOST }} sudo systemctl start yttr
