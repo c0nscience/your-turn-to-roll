@@ -69,20 +69,23 @@ func main() {
 		r.PathPrefix("/").Handler(spa)
 	}
 
-	corsOpts := cors.New(cors.Options{
-		AllowedOrigins: []string{
-			"*",
-		},
-		AllowedMethods: []string{
-			http.MethodGet,
-			http.MethodPost,
-			http.MethodPut,
-			http.MethodDelete,
-			http.MethodHead,
-		},
-		AllowedHeaders: []string{"*"},
-	})
-	handler := corsOpts.Handler(r)
+	var handler http.Handler = r
+	if !public.IsEmbedded {
+		corsOpts := cors.New(cors.Options{
+			AllowedOrigins: []string{
+				"*",
+			},
+			AllowedMethods: []string{
+				http.MethodGet,
+				http.MethodPost,
+				http.MethodPut,
+				http.MethodDelete,
+				http.MethodHead,
+			},
+			AllowedHeaders: []string{"*"},
+		})
+		handler = corsOpts.Handler(r)
+	}
 
 	srv := &http.Server{
 		Addr:         ":8081",
