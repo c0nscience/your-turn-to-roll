@@ -41,6 +41,6 @@ jobs:
           echo "${{ vars.SSH_CONFIG }}" > ~/.ssh/config
       - name: Deploy to remote server
         run: |
-          ssh -o PubkeyAuthentication=yes -p ${{ secrets.TARGET_PORT }} -t ${{ secrets.TARGET_USER }}@${{ secrets.TARGET_HOST }} systemctl --user stop yttr
+          ssh -o PubkeyAuthentication=yes -p ${{ secrets.TARGET_PORT }} ${{ secrets.TARGET_USER }}@${{ secrets.TARGET_HOST }} systemctl --user stop yttr
           scp -o PubkeyAuthentication=yes -p ${{ secrets.TARGET_PORT }} server/dist/your-turn-to-roll_linux_amd64_v1/your-turn-to-roll '${{ secrets.TARGET_USER }}@${{ secrets.TARGET_HOST }}:web'
-          ssh -o PubkeyAuthentication=yes -p ${{ secrets.TARGET_PORT }} -t ${{ secrets.TARGET_USER }}@${{ secrets.TARGET_HOST }} systemctl --user start yttr
+          ssh -o PubkeyAuthentication=yes -p ${{ secrets.TARGET_PORT }} ${{ secrets.TARGET_USER }}@${{ secrets.TARGET_HOST }} systemctl --user start yttr
