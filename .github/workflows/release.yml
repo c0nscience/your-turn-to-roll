@@ -39,8 +39,11 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           echo "${{ secrets.TARGET_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
           echo "${{ vars.SSH_CONFIG }}" > ~/.ssh/config
+      - name: Fix Permissions
+        run: |
+          chmod +x server/dist/your-turn-to-roll_linux_amd64_v1/your-turn-to-roll
       - name: Deploy to remote server
         run: |
           ssh -p ${{ secrets.TARGET_PORT }} ${{ secrets.TARGET_USER }}@${{ secrets.TARGET_HOST }} 'systemctl --user stop yttr'
-          scp -p ${{ secrets.TARGET_PORT }} server/dist/your-turn-to-roll_linux_amd64_v1/your-turn-to-roll '${{ secrets.TARGET_USER }}@${{ secrets.TARGET_HOST }}:web'
+          scp -P ${{ secrets.TARGET_PORT }} server/dist/your-turn-to-roll_linux_amd64_v1/your-turn-to-roll '${{ secrets.TARGET_USER }}@${{ secrets.TARGET_HOST }}:web'
           ssh -p ${{ secrets.TARGET_PORT }} ${{ secrets.TARGET_USER }}@${{ secrets.TARGET_HOST }} 'systemctl --user start yttr'
