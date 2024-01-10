@@ -12,9 +12,13 @@ interface Message {
 }
 
 export const connect = (id: number) => {
+  if (socket && socket.readyState === WebSocket.OPEN) {
+    socket.close(1001, 'got a socket and have to reconnect')
+  }
+
   if (import.meta.env.PROD) {
     socket = new WebSocket(`ws://${window.location.host}${apiWsUrl}/fight/${id}/ws`)
-  }else {
+  } else {
     socket = new WebSocket(`${apiWsUrl}/fight/${id}/ws`)
   }
   const promise = new Promise<void>((resolve, reject) => {
