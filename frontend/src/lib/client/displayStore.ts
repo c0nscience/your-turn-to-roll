@@ -11,7 +11,7 @@ interface Message {
   payload: string[]
 }
 
-export const connect = (id: number) => {
+export const connect = (id: number, onCloseFn: () => void = () => {}) => {
   if (socket && socket.readyState === WebSocket.OPEN) {
     socket.close(1001, 'got a socket and have to reconnect')
   }
@@ -42,6 +42,7 @@ export const connect = (id: number) => {
 
   socket.onclose = evt => {
     console.log('websocket closed ', evt.code, evt.reason)
+    onCloseFn()
   }
 
   return promise

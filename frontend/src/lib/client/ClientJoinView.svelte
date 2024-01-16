@@ -9,7 +9,7 @@
   let dialog: HTMLDialogElement
 
   const handleJoin = () => {
-    connect(sessionId!)
+    connect(sessionId!, handleJoin)
       .then(() => {
         $sessionIdStore = sessionId!
         $modeStore = 'client-fight'

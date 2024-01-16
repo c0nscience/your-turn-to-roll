@@ -9,7 +9,7 @@
   window.addEventListener('visibilitychange', async (evt) => {
     const visibilityState = (evt.target as Document).visibilityState
     if (visibilityState === 'visible' && !lastVisible) {
-      await connect($sessionIdStore)
+      await connect($sessionIdStore, () => {connect($sessionIdStore)})
     }
     lastVisible = visibilityState === 'visible'
   })
