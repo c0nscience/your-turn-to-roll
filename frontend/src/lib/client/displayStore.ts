@@ -40,5 +40,9 @@ export const connect = (id: number) => {
     }
   }
 
+  socket.onclose = evt => {
+    console.log('websocket closed ', evt.code, evt.reason)
+  }
+
   return promise
 }
